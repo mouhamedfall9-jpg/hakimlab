@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HakimLab — Génère du contenu qui impressionne</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0A0A0F;
+    --paper: #F5F3EE;
+    --cream: #EDE9E0;
+    --gold: #C9A84C;
+    --gold-light: #E8D5A3;
+    --teal: #1A6B6B;
+    --teal-light: #2A9B9B;
+    --rust: #C24B2A;
+    --muted: #6B6760;
+    --border: #D4CFC5;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* ── GRAIN OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 60px;
+    background: rgba(245, 243, 238, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.4rem;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-mark {
+    width: 32px;
+    height: 32px;
+    background: var(--ink);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .logo-mark svg { width: 18px; height: 18px; }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 36px;
+    align-items: center;
+  }
+
+  nav ul a {
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 0.88rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    transition: color 0.2s;
+  }
+
+  nav ul a:hover { color: var(--ink); }
+
+  .nav-cta {
+    background: var(--ink) !important;
+    color: var(--paper) !important;
+    padding: 10px 22px;
+    border-radius: 6px;
+    font-size: 0.85rem !important;
+    transition: background 0.2s, transform 0.1s !important;
+  }
+
+  .nav-cta:hover { background: var(--teal) !important; transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 120px 60px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 75% 50%, rgba(201, 168, 76, 0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 20% 80%, rgba(26, 107, 107, 0.08) 0%, transparent 60%);
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.4;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 32px;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .hero-tag span { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    margin-bottom: 28px;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+
+  h1 em {
+    font-style: normal;
+    color: var(--teal);
+    position: relative;
+    display: inline-block;
+  }
+
+  h1 em::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: underlineIn 0.8s 0.9s ease forwards;
+  }
+
+  .hero-sub {
+    font-size: 1.15rem;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 520px;
+    margin-bottom: 44px;
+    font-weight: 300;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 16px 32px;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    letter-spacing: 0.01em;
+    transition: all 0.25s;
+    border: 2px solid var(--ink);
+  }
+
+  .btn-primary:hover {
+    background: var(--teal);
+    border-color: var(--teal);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(26, 107, 107, 0.25);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    color: var(--ink);
+    padding: 16px 32px;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    border: 2px solid var(--border);
+    transition: all 0.25s;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--ink);
+    transform: translateY(-2px);
+  }
+
+  /* ── FLOATING CARDS ── */
+  .hero-visual {
+    position: absolute;
+    right: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    width: 380px;
+    animation: fadeLeft 1s 0.4s ease both;
+  }
+
+  .demo-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .demo-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+  }
+
+  .demo-card.wide { grid-column: 1 / -1; }
+
+  .demo-card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+  }
+
+  .demo-card-icon.img-bg { background: rgba(201, 168, 76, 0.15); }
+  .demo-card-icon.vid-bg { background: rgba(26, 107, 107, 0.12); }
+  .demo-card-icon.audio-bg { background: rgba(194, 75, 42, 0.1); }
+
+  .demo-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .demo-card p {
+    font-size: 0.75rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .demo-bar {
+    height: 4px;
+    background: var(--cream);
+    border-radius: 4px;
+    margin-top: 12px;
+    overflow: hidden;
+  }
+
+  .demo-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    animation: barGrow 1.5s 1s ease forwards;
+    width: 0;
+  }
+
+  .fill-gold { background: var(--gold); animation-delay: 1.2s !important; }
+  .fill-teal { background: var(--teal-light); animation-delay: 1.4s !important; }
+  .fill-rust { background: var(--rust); animation-delay: 1.6s !important; }
+
+  /* ── LOGOS / SOCIAL PROOF ── */
+  .proof {
+    padding: 40px 60px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 48px;
+    overflow: hidden;
+  }
+
+  .proof-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    white-space: nowrap;
+    font-weight: 500;
+  }
+
+  .proof-logos {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+  }
+
+  .proof-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--border);
+    letter-spacing: -0.02em;
+    transition: color 0.3s;
+  }
+
+  .proof-logo:hover { color: var(--muted); }
+
+  /* ── FEATURES ── */
+  .features {
+    padding: 120px 60px;
+  }
+
+  .section-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    max-width: 600px;
+    margin-bottom: 70px;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--border);
+    border: 2px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .feature-item {
+    background: var(--paper);
+    padding: 48px 40px;
+    transition: background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .feature-item::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s;
+  }
+
+  .feature-item:hover { background: white; }
+  .feature-item:hover::before { transform: scaleX(1); }
+
+  .feature-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    margin-bottom: 24px;
+  }
+
+  .feature-icon-lg {
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .feature-item h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+  }
+
+  .feature-item p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ── HOW IT WORKS ── */
+  .how {
+    padding: 120px 60px;
+    background: var(--ink);
+    color: var(--paper);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .how::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(ellipse, rgba(201, 168, 76, 0.08) 0%, transparent 70%);
+  }
+
+  .how .section-title { color: var(--paper); max-width: 500px; }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin-top: 60px;
+    position: relative;
+  }
+
+  .steps::before {
+    content: '';
+    position: absolute;
+    top: 28px;
+    left: 10%;
+    width: 80%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.4), transparent);
+  }
+
+  .step {
+    padding: 0 24px;
+    text-align: center;
+  }
+
+  .step-num {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 1px solid rgba(201, 168, 76, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--gold);
+    margin: 0 auto 28px;
+    background: rgba(201, 168, 76, 0.05);
+    position: relative;
+    z-index: 1;
+  }
+
+  .step h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 12px;
+    color: var(--paper);
+  }
+
+  .step p {
+    font-size: 0.85rem;
+    color: rgba(245, 243, 238, 0.5);
+    line-height: 1.6;
+  }
+
+  /* ── PRICING ── */
+  .pricing {
+    padding: 120px 60px;
+  }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 60px;
+  }
+
+  .price-card {
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    padding: 36px 28px;
+    transition: all 0.3s;
+    position: relative;
+    background: white;
+  }
+
+  .price-card:hover {
+    border-color: var(--teal);
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(26, 107, 107, 0.12);
+  }
+
+  .price-card.featured {
+    border-color: var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .price-card.featured:hover {
+    border-color: var(--teal);
+    background: var(--teal);
+  }
+
+  .price-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--gold);
+    color: var(--ink);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 100px;
+  }
+
+  .price-plan {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  .price-card.featured .price-plan { color: rgba(245,243,238,0.5); }
+
+  .price-amount {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .price-period {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+
+  .price-card.featured .price-period { color: rgba(245,243,238,0.5); }
+
+  .price-features {
+    list-style: none;
+    margin-bottom: 32px;
+  }
+
+  .price-features li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--cream);
+    color: var(--muted);
+  }
+
+  .price-card.featured .price-features li {
+    border-color: rgba(245,243,238,0.08);
+    color: rgba(245,243,238,0.7);
+  }
+
+  .price-features li::before {
+    content: '✓';
+    color: var(--teal-light);
+    font-weight: 700;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+  }
+
+  .price-card.featured .price-features li::before { color: var(--gold); }
+
+  .btn-plan {
+    display: block;
+    text-align: center;
+    padding: 14px;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.88rem;
+    text-decoration: none;
+    border: 2px solid var(--border);
+    color: var(--ink);
+    transition: all 0.2s;
+  }
+
+  .btn-plan:hover { border-color: var(--teal); color: var(--teal); }
+
+  .price-card.featured .btn-plan {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--ink);
+  }
+
+  .price-card.featured .btn-plan:hover {
+    background: white;
+    border-color: white;
+    color: var(--ink);
+  }
+
+  /* ── CTA BAND ── */
+  .cta-band {
+    margin: 0 60px 120px;
+    background: var(--teal);
+    border-radius: 24px;
+    padding: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-band::before {
+    content: '';
+    position: absolute;
+    right: -60px;
+    top: -60px;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+
+  .cta-band::after {
+    content: '';
+    position: absolute;
+    right: 80px;
+    bottom: -80px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+
+  .cta-band h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.6rem, 2.5vw, 2.4rem);
+    color: white;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    max-width: 500px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-band-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .btn-white {
+    display: inline-block;
+    background: white;
+    color: var(--teal);
+    padding: 16px 36px;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.25s;
+    white-space: nowrap;
+  }
+
+  .btn-white:hover {
+    background: var(--gold);
+    color: var(--ink);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  }
+
+  .cta-note {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.6);
+    text-align: center;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 48px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  footer .logo { font-size: 1.1rem; }
+
+  .footer-links {
+    display: flex;
+    gap: 28px;
+  }
+
+  .footer-links a {
+    font-size: 0.82rem;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--ink); }
+
+  .footer-copy {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeLeft {
+    from { opacity: 0; transform: translate(30px, -50%); }
+    to { opacity: 1; transform: translate(0, -50%); }
+  }
+
+  @keyframes underlineIn {
+    to { transform: scaleX(1); }
+  }
+
+  @keyframes barGrow {
+    to { width: var(--w, 75%); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 1100px) {
+    .hero-visual { display: none; }
+    .features-grid { grid-template-columns: 1fr 1fr; }
+    .pricing-grid { grid-template-columns: 1fr 1fr; }
+    .steps { grid-template-columns: 1fr 1fr; gap: 40px; }
+    .steps::before { display: none; }
+  }
+
+  @media (max-width: 700px) {
+    nav { padding: 16px 20px; }
+    nav ul { display: none; }
+    .hero { padding: 100px 24px 60px; }
+    .features, .how, .pricing { padding: 80px 24px; }
+    .proof { padding: 28px 24px; gap: 24px; flex-wrap: wrap; }
+    .cta-band { margin: 0 24px 80px; padding: 48px 32px; flex-direction: column; text-align: center; }
+    footer { padding: 40px 24px; flex-direction: column; gap: 20px; text-align: center; }
+    .features-grid, .pricing-grid, .steps { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M12 2L14.5 9H22L16 13.5L18.5 21L12 16.5L5.5 21L8 13.5L2 9H9.5L12 2Z" fill="#F5F3EE"/>
+      </svg>
+    </div>
+    HakimLab
+  </div>
+  <ul>
+    <li><a href="#features">Fonctionnalités</a></li>
+    <li><a href="#how">Comment ça marche</a></li>
+    <li><a href="#pricing">Tarifs</a></li>
+    <li><a href="#pricing" class="nav-cta">Commencer gratuitement</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-tag"><span></span> Le laboratoire IA francophone</div>
+    <h1>Crée du contenu<br><em>extraordinaire</em><br>en secondes.</h1>
+    <p class="hero-sub">Images, vidéos, voix off — générés par intelligence artificielle. Pour les créateurs, agences et entreprises francophones.</p>
+    <div class="hero-actions">
+      <a href="#pricing" class="btn-primary">
+        Essayer gratuitement
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+      </a>
+      <a href="#how" class="btn-secondary">
+        Voir la démo
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z" fill="currentColor"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="demo-card">
+      <div class="demo-card-icon img-bg">🖼️</div>
+      <h3>Image générée</h3>
+      <p>Visuel marketing en 4s</p>
+      <div class="demo-bar"><div class="demo-bar-fill fill-gold" style="--w: 85%"></div></div>
+    </div>
+    <div class="demo-card">
+      <div class="demo-card-icon audio-bg">🎙️</div>
+      <h3>Voix off IA</h3>
+      <p>Naturelle & expressive</p>
+      <div class="demo-bar"><div class="demo-bar-fill fill-rust" style="--w: 70%"></div></div>
+    </div>
+    <div class="demo-card wide">
+      <div class="demo-card-icon vid-bg">🎬</div>
+      <h3>Vidéo courte IA</h3>
+      <p>Reel & TikTok prêts à publier en moins de 30 secondes</p>
+      <div class="demo-bar"><div class="demo-bar-fill fill-teal" style="--w: 92%"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF -->
+<div class="proof reveal">
+  <span class="proof-label">Ils nous font confiance</span>
+  <div class="proof-logos">
+    <span class="proof-logo">AgenceNova</span>
+    <span class="proof-logo">Digitalis</span>
+    <span class="proof-logo">CreativLab</span>
+    <span class="proof-logo">MarketAI</span>
+    <span class="proof-logo">StudioFlow</span>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="section-label reveal">Ce qu'on fait</div>
+  <h2 class="section-title reveal">Tout ce dont tu as besoin pour créer.</h2>
+
+  <div class="features-grid reveal">
+    <div class="feature-item">
+      <div class="feature-num">01</div>
+      <span class="feature-icon-lg">🖼️</span>
+      <h3>Génération d'images</h3>
+      <p>Visuels publicitaires, photos produits, illustrations personnalisées. Décris en français, reçois une image professionnelle.</p>
+    </div>
+    <div class="feature-item">
+      <div class="feature-num">02</div>
+      <span class="feature-icon-lg">🎬</span>
+      <h3>Vidéos courtes IA</h3>
+      <p>Reels Instagram, TikToks, YouTube Shorts. L'IA anime et génère des clips prêts à publier en quelques secondes.</p>
+    </div>
+    <div class="feature-item">
+      <div class="feature-num">03</div>
+      <span class="feature-icon-lg">🎙️</span>
+      <h3>Voix off naturelle</h3>
+      <p>Des dizaines de voix en français, anglais, wolof. Qualité studio, sans micro, sans studio d'enregistrement.</p>
+    </div>
+    <div class="feature-item">
+      <div class="feature-num">04</div>
+      <span class="feature-icon-lg">⚡</span>
+      <h3>Ultra rapide</h3>
+      <p>Génération en moins de 10 secondes grâce à une infrastructure cloud optimisée. Pas d'attente, production en flux.</p>
+    </div>
+    <div class="feature-item">
+      <div class="feature-num">05</div>
+      <span class="feature-icon-lg">🌍</span>
+      <h3>100% francophone</h3>
+      <p>Interface, support et prompts en français. Conçu pour les réalités du marché européen et africain francophone.</p>
+    </div>
+    <div class="feature-item">
+      <div class="feature-num">06</div>
+      <span class="feature-icon-lg">🔒</span>
+      <h3>Données sécurisées</h3>
+      <p>Conformité RGPD garantie. Tes créations t'appartiennent. Hébergement sécurisé en Europe.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="section-label reveal" style="color: rgba(201,168,76,0.7)">Comment ça marche</div>
+  <h2 class="section-title reveal">Quatre étapes. Un résultat parfait.</h2>
+  <div class="steps reveal">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h3>Crée un compte</h3>
+      <p>Inscription en 30 secondes. Pas de carte bancaire pour le plan gratuit.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h3>Décris ton contenu</h3>
+      <p>Tape ta description en français. Sois aussi précis ou créatif que tu veux.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h3>L'IA génère</h3>
+      <p>Image, vidéo ou voix off créée en quelques secondes par nos modèles IA.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <h3>Télécharge et publie</h3>
+      <p>Fichier HD prêt à l'emploi. Publie directement sur tes réseaux sociaux.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="section-label reveal">Tarifs simples</div>
+  <h2 class="section-title reveal">Commence gratuitement,<br>évolue quand tu veux.</h2>
+  <div class="pricing-grid reveal">
+    <div class="price-card">
+      <div class="price-plan">Gratuit</div>
+      <div class="price-amount">0€</div>
+      <div class="price-period">pour toujours</div>
+      <ul class="price-features">
+        <li>15 générations / mois</li>
+        <li>Images IA</li>
+        <li>Voix off (3 voix)</li>
+        <li>Téléchargement HD</li>
+      </ul>
+      <a href="#" class="btn-plan">Commencer</a>
+    </div>
+    <div class="price-card">
+      <div class="price-plan">Starter</div>
+      <div class="price-amount">9€</div>
+      <div class="price-period">par mois</div>
+      <ul class="price-features">
+        <li>100 générations / mois</li>
+        <li>Images + Voix off</li>
+        <li>Toutes les voix</li>
+        <li>Support par email</li>
+      </ul>
+      <a href="#" class="btn-plan">Choisir Starter</a>
+    </div>
+    <div class="price-card featured">
+      <div class="price-badge">Populaire</div>
+      <div class="price-plan">Pro</div>
+      <div class="price-amount">29€</div>
+      <div class="price-period">par mois</div>
+      <ul class="price-features">
+        <li>500 générations / mois</li>
+        <li>Images + Vidéos + Voix</li>
+        <li>Priorité de génération</li>
+        <li>Support prioritaire</li>
+      </ul>
+      <a href="#" class="btn-plan">Choisir Pro</a>
+    </div>
+    <div class="price-card">
+      <div class="price-plan">Business</div>
+      <div class="price-amount">79€</div>
+      <div class="price-period">par mois</div>
+      <ul class="price-features">
+        <li>Générations illimitées</li>
+        <li>API access inclus</li>
+        <li>Facturation mensuelle</li>
+        <li>Account manager dédié</li>
+      </ul>
+      <a href="#" class="btn-plan">Nous contacter</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<div class="cta-band reveal">
+  <h2>Prêt à créer du contenu qui fait la différence ?</h2>
+  <div class="cta-band-actions">
+    <a href="#" class="btn-white">Créer mon compte gratuit</a>
+    <span class="cta-note">Aucune carte bancaire requise</span>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M12 2L14.5 9H22L16 13.5L18.5 21L12 16.5L5.5 21L8 13.5L2 9H9.5L12 2Z" fill="#F5F3EE"/>
+      </svg>
+    </div>
+    HakimLab
+  </div>
+  <div class="footer-links">
+    <a href="#">Confidentialité</a>
+    <a href="#">CGU</a>
+    <a href="#">RGPD</a>
+    <a href="#">Contact</a>
+  </div>
+  <div class="footer-copy">© 2026 HakimLab. Tous droits réservés.</div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Smooth nav background
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').style.boxShadow =
+      window.scrollY > 20 ? '0 2px 20px rgba(0,0,0,0.06)' : 'none';
+  });
+</script>
+</body>
+</html>
